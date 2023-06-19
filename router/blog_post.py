@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict 
 from fastapi import APIRouter, Query, Path, Body
 from pydantic import BaseModel
 
@@ -7,11 +7,19 @@ router = APIRouter(
     tags=['blog']
 )
 
+
+class Image(BaseModel):
+    url: str
+    alias: str
+
 class BlogModel(BaseModel):
     title: str
     content: str
     nb_comments: int
-    published: bool 
+    published: bool
+    tags: List[str] = []
+    metadata: Dict[str, str] = {'key1': 'val1'} 
+    images: Optional[Image] = None
 
 @router.post('/new/{id}')
 def create_blog(
@@ -46,3 +54,7 @@ def create_comment(blog: BlogModel, id: int,
         'version': v,
         'comment_id': comment_id
     }
+
+
+def required_functionality():
+    return {'message': 'Leaving this function as is for now'}
